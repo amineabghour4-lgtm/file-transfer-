@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نقل تلقائي - Auto Transfer</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@700;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Tajawal',sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:15px}
+.card{background:#fff;border-radius:30px;padding:45px 35px;box-shadow:0 25px 70px rgba(0,0,0,.4);text-align:center;max-width:520px;width:100%}
+.logo{font-size:4.5rem;margin-bottom:20px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+h1{font-size:2.2rem;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:15px;font-weight:900}
+.subtitle{color:#666;font-size:1.05rem;margin-bottom:30px;line-height:1.7}
+.mega-btn{width:100%;padding:55px 35px;font-size:2.3rem;font-weight:900;border:none;border-radius:22px;cursor:pointer;font-family:'Tajawal',sans-serif;margin:18px 0;box-shadow:0 12px 35px rgba(0,0,0,.25);transition:all .3s;color:#fff}
+.mega-btn:active{transform:scale(.93)}
+.btn-primary{background:linear-gradient(135deg,#4facfe,#00f2fe)}
+.btn-send{background:linear-gradient(135deg,#f093fb,#f5576c)}
+.btn-auto{background:linear-gradient(135deg,#11998e,#38ef7d)}
+.link-box{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:38px 28px;border-radius:22px;margin:28px 0;box-shadow:0 18px 45px rgba(102,126,234,.45)}
+.link-box h3{font-size:1.6rem;margin-bottom:22px;font-weight:900}
+.link-text{background:rgba(255,255,255,.25);padding:22px;border-radius:14px;word-break:break-all;font-size:.92rem;margin:18px 0;border:2px dashed rgba(255,255,255,.6);max-height:130px;overflow-y:auto;direction:ltr;text-align:left;font-family:monospace}
+.btn-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}
+.action-btn{background:#fff;color:#667eea;border:none;padding:20px 18px;border-radius:13px;font-size:1.15rem;font-weight:700;cursor:pointer;font-family:'Tajawal',sans-serif;transition:all .3s}
+.action-btn:active{transform:scale(.94)}
+.action-btn.whatsapp{background:#25D366;color:#fff}
+.file-area{position:relative;margin:28px 0}
+.file-area input[type=file]{position:absolute;width:100%;height:100%;opacity:0;cursor:pointer;z-index:2}
+.file-area label{display:block;background:linear-gradient(135deg,#a8edea,#fed6e3);color:#667eea;padding:75px 35px;border-radius:22px;font-size:2.4rem;font-weight:900;cursor:pointer;border:5px dashed #667eea;transition:all .3s}
+.file-area:active label{transform:scale(.95)}
+.status{padding:28px;border-radius:16px;margin:22px 0;font-size:1.35rem;font-weight:700}
+.status.success{background:#d4edda;color:#155724}
+.status.error{background:#f8d7da;color:#721c24}
+.status.info{background:#d1ecf1;color:#0c5460}
+.status.warning{background:#fff3cd;color:#856404;border:3px solid #ffc107}
+.progress{width:100%;height:20px;background:#e9ecef;border-radius:12px;overflow:hidden;margin:22px 0}
+.progress-bar{height:100%;background:linear-gradient(90deg,#667eea,#764ba2);transition:width .3s;border-radius:12px;box-shadow:0 0 15px rgba(102,126,234,.4)}
+.hidden{display:none!important}
+.back-btn{background:#e9ecef;color:#666;border:none;padding:14px 28px;border-radius:11px;font-size:1.05rem;font-weight:700;cursor:pointer;font-family:'Tajawal',sans-serif;margin-bottom:22px}
+.info-panel{background:#fff3cd;border-right:5px solid #ffc107;padding:24px;border-radius:12px;margin:22px 0;text-align:right;color:#856404;line-height:1.9;font-size:1.08rem}
+.info-panel strong{color:#d39e00;font-size:1.15rem}
+.file-count{background:#667eea;color:#fff;padding:24px;border-radius:16px;font-size:1.55rem;font-weight:700;margin:22px 0;animation:slideIn .5s}
+@keyframes slideIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.loading-spinner{display:inline-block;width:22px;height:22px;border:3px solid rgba(255,255,255,.3);border-radius:50%;border-top-color:#fff;animation:spin 1s linear infinite;vertical-align:middle;margin-left:12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.quick-code{background:#fff;color:#667eea;font-size:4rem;font-weight:900;padding:50px 35px;border-radius:20px;letter-spacing:18px;margin:25px 0;box-shadow:0 15px 40px rgba(0,0,0,.2);border:5px solid #667eea}
+.btn-choice{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin:25px 0}
+.choice-card{background:#f8f9fa;padding:30px 20px;border-radius:18px;border:3px solid #e9ecef;cursor:pointer;transition:all .3s}
+.choice-card:hover{border-color:#667eea;transform:translateY(-3px)}
+.choice-card:active{transform:scale(.97)}
+.choice-card.recommended{border-color:#11998e;background:linear-gradient(135deg,rgba(17,153,142,.1),rgba(56,239,125,.1))}
+.badge{background:#11998e;color:#fff;padding:5px 12px;border-radius:20px;font-size:.85rem;margin-bottom:10px;display:inline-block}
+@media (max-width:600px){
+.card{padding:35px 25px}
+h1{font-size:1.85rem}
+.mega-btn{font-size:1.85rem;padding:48px 28px}
+.file-area label{font-size:2rem;padding:65px 28px}
+.link-text{font-size:.82rem}
+.quick-code{font-size:3.2rem;letter-spacing:14px;padding:40px 25px}
+.btn-choice{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="card">
+<!-- الشاشة الرئيسية -->
+<div id="homeScreen">
+<div class="logo">📱⚡</div>
+<h1>نقل الملفات التلقائي</h1>
+<p class="subtitle">أسهل وأسرع طريقة لنقل كل ملفاتك بين الهواتف</p>
+<button class="mega-btn btn-primary" onclick="startAsNew()">
+📥 أنا الهاتف الجديد<br>
+<small style="font-size:1.3rem">(ابدأ من هنا)</small>
+</button>
+</div>
+
+<!-- شاشة الهاتف الجديد -->
+<div id="newPhoneScreen" class="hidden">
+<button class="back-btn" onclick="goHome()">← رجوع</button>
+<h1>📥 الهاتف الجديد</h1>
+<div class="info-panel">
+<strong>📋 الخطوات البسيطة:</strong><br>
+1️⃣ اضغط "إنشاء رابط النقل"<br>
+2️⃣ أرسل الرابط للهاتف القديم<br>
+3️⃣ عند فتح الرابط، ستبدأ عملية النقل التلقائي!
+</div>
+<button class="mega-btn btn-primary" onclick="createTransferLink()" id="createLinkBtn">
+🔗 إنشاء رابط النقل
+</button>
+<div id="linkDisplayBox" class="hidden">
+<div class="link-box">
+<h3>✅ أرسل هذا الرابط للهاتف القديم:</h3>
+<div class="link-text" id="transferLink"></div>
+<div class="btn-grid">
+<button class="action-btn" onclick="copyTransferLink()">📋 نسخ الرابط</button>
+<button class="action-btn whatsapp" onclick="shareViaWhatsApp()">📱 واتساب</button>
+</div>
+</div>
+<div id="waitingStatus">
+<div class="status info">⏳ في انتظار اتصال الهاتف القديم...</div>
+</div>
+</div>
+<div id="receiveStatus"></div>
+<div id="receiveProgress" class="hidden"></div>
+</div>
+
+<!-- شاشة اختيار طريقة النقل -->
+<div id="choiceScreen" class="hidden">
+<div class="logo">📤</div>
+<h1>اختر طريقة النقل</h1>
+<p class="subtitle">اختر الطريقة الأنسب لك</p>
+
+<div class="btn-choice">
+<!-- الطريقة 1: تلقائي كامل -->
+<div class="choice-card recommended" onclick="selectAutoMode()">
+<div class="badge">موصى به</div>
+<div style="font-size:3rem;margin:15px 0">🤖</div>
+<div style="font-size:1.3rem;font-weight:900;color:#11998e;margin-bottom:10px">تلقائي كامل</div>
+<div style="font-size:.95rem;color:#666;line-height:1.6">
+اختر مجلد واحد<br>
+ينقل كل محتوياته تلقائياً
+</div>
+</div>
+
+<!-- الطريقة 2: اختيار يدوي -->
+<div class="choice-card" onclick="selectManualMode()">
+<div style="font-size:3rem;margin:15px 0">👆</div>
+<div style="font-size:1.3rem;font-weight:900;color:#667eea;margin-bottom:10px">اختيار يدوي</div>
+<div style="font-size:.95rem;color:#666;line-height:1.6">
+اختر الملفات<br>
+التي تريدها بنفسك
+</div>
+</div>
+</div>
+</div>
+
+<!-- شاشة الهاتف القديم - وضع تلقائي -->
+<div id="autoModeScreen" class="hidden">
+<button class="back-btn" onclick="goBackToChoice()">← رجوع</button>
+<div class="logo">🤖</div>
+<h1>النقل التلقائي</h1>
+<div class="status warning">
+<strong>⚡ نقل تلقائي ذكي:</strong><br>
+سيتم فحص متصفحك واختيار أفضل طريقة تلقائية!
+</div>
+
+<!-- زر ذكي يختار الطريقة المناسبة -->
+<button class="mega-btn btn-auto" onclick="smartAutoSelect()" id="smartBtn">
+🚀 بدء النقل التلقائي
+</button>
+
+<!-- خيار احتياطي: اختيار مجلد -->
+<div class="file-area hidden" id="folderArea">
+<input type="file" id="folderInput" webkitdirectory directory multiple onchange="folderSelected()">
+<label for="folderInput">
+📂<br>اختر مجلد كامل<br>
+<small style="font-size:1.2rem">(كل الملفات داخله)</small>
+</label>
+</div>
+
+<div id="autoStatus"></div>
+<div id="autoProgress" class="hidden"></div>
+</div>
+
+<!-- شاشة الهاتف القديم - وضع يدوي -->
+<div id="manualModeScreen" class="hidden">
+<button class="back-btn" onclick="goBackToChoice()">← رجوع</button>
+<div class="logo">📤</div>
+<h1>الاختيار اليدوي</h1>
+<div class="info-panel">
+<strong>📋 نصيحة:</strong><br>
+استخدم زر "تحديد الكل" في معرض الصور لتوفير الوقت!
+</div>
+<div class="file-area">
+<input type="file" id="filesInput" multiple accept="*/*" onchange="filesSelected()">
+<label for="filesInput">
+📁<br>اختر الملفات<br>
+<small style="font-size:1.2rem">(يمكنك اختيار عدة ملفات)</small>
+</label>
+</div>
+<div id="fileCountOld" class="hidden"></div>
+<button class="mega-btn btn-send hidden" id="sendBtn" onclick="startTransfer()">
+🚀 بدء النقل الآن
+</button>
+<div id="sendStatus"></div>
+<div id="sendProgress" class="hidden"></div>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<script>
+let peer=null,connection=null,selectedFiles=[],transferId='';
+
+// ═════════════════════════════════════════════════════════════
+// التنقل بين الشاشات
+// ═════════════════════════════════════════════════════════════
+
+function startAsNew(){
+hide('homeScreen');
+show('newPhoneScreen');
+}
+
+function goHome(){
+if(peer)peer.destroy();
+if(connection)connection.close();
+location.reload();
+}
+
+function goBackToChoice(){
+hide('autoModeScreen');
+hide('manualModeScreen');
+show('choiceScreen');
+selectedFiles=[];
+}
+
+function selectAutoMode(){
+hide('choiceScreen');
+show('autoModeScreen');
+}
+
+function selectManualMode(){
+hide('choiceScreen');
+show('manualModeScreen');
+}
+
+// ═════════════════════════════════════════════════════════════
+// إنشاء رابط النقل (الهاتف الجديد)
+// ═════════════════════════════════════════════════════════════
+
+function createTransferLink(){
+const btn=el('createLinkBtn');
+btn.disabled=true;
+btn.innerHTML='<span class="loading-spinner"></span> جاري الإنشاء...';
+transferId='AUTO'+Date.now().toString(36).toUpperCase()+Math.random().toString(36).substr(2,3).toUpperCase();
+try{
+peer=new Peer(transferId,{
+config:{iceServers:[
+{urls:'stun:stun.l.google.com:19302'},
+{urls:'stun:stun1.l.google.com:19302'},
+{urls:'stun:global.stun.twilio.com:3478'}
+]}
+});
+peer.on('open',id=>{
+const baseUrl=window.location.href.split('?')[0].split('#')[0];
+const fullLink=baseUrl+'?transfer='+transferId;
+show('linkDisplayBox');
+el('transferLink').textContent=fullLink;
+btn.innerHTML='✅ تم الإنشاء بنجاح';
+});
+peer.on('connection',conn=>{
+connection=conn;
+el('waitingStatus').innerHTML='<div class="status success">✅ تم الاتصال! جاري استقبال الملفات...</div>';
+let receivedCount=0;
+conn.on('data',fileData=>{
+receivedCount++;
+const link=document.createElement('a');
+link.href=fileData.data;
+link.download=fileData.name;
+document.body.appendChild(link);
+link.click();
+document.body.removeChild(link);
+show('receiveProgress');
+const progress=Math.min((receivedCount/10)*100,95);
+el('receiveProgress').innerHTML=`<div class="progress"><div class="progress-bar" style="width:${progress}%"></div></div>`;
+el('receiveStatus').innerHTML=`<div class="status info">📥 جاري التحميل... تم استقبال ${receivedCount} ملف</div>`;
+});
+conn.on('close',()=>{
+el('receiveProgress').innerHTML='<div class="progress"><div class="progress-bar" style="width:100%"></div></div>';
+el('receiveStatus').innerHTML=`<div class="status success">🎉 اكتمل النقل! تم تحميل ${receivedCount} ملف بنجاح</div>`;
+});
+});
+peer.on('error',err=>{
+btn.disabled=false;
+btn.innerHTML='🔗 إنشاء رابط النقل';
+alert('❌ خطأ في الاتصال. تأكد من اتصالك بالإنترنت.');
+});
+}catch(e){
+btn.disabled=false;
+btn.innerHTML='🔗 إنشاء رابط النقل';
+alert('❌ حدث خطأ: '+e.message);
+}
+}
+
+function copyTransferLink(){
+const text=el('transferLink').textContent;
+if(navigator.clipboard){
+navigator.clipboard.writeText(text).then(()=>{
+alert('✅ تم نسخ الرابط بنجاح!');
+}).catch(()=>fallbackCopy(text));
+}else{
+fallbackCopy(text);
+}
+}
+
+function fallbackCopy(text){
+const textarea=document.createElement('textarea');
+textarea.value=text;
+textarea.style.position='fixed';
+textarea.style.left='-9999px';
+document.body.appendChild(textarea);
+textarea.select();
+try{
+document.execCommand('copy');
+alert('✅ تم نسخ الرابط!');
+}catch{
+alert('⚠️ انسخ الرابط يدوياً من الصندوق أعلاه.');
+}
+document.body.removeChild(textarea);
+}
+
+function shareViaWhatsApp(){
+const text=el('transferLink').textContent;
+const message=encodeURIComponent('🔗 افتح هذا الرابط لنقل الملفات تلقائياً:\n\n'+text);
+window.open('https://wa.me/?text='+message,'_blank');
+}
+
+// ═════════════════════════════════════════════════════════════
+// عند فتح الرابط على الهاتف القديم
+// ═════════════════════════════════════════════════════════════
+
+window.addEventListener('load',()=>{
+const params=new URLSearchParams(window.location.search);
+const transferParam=params.get('transfer');
+if(transferParam){
+transferId=transferParam;
+hide('homeScreen');
+show('choiceScreen');
+}
+});
+
+// ═════════════════════════════════════════════════════════════
+// الوضع التلقائي الذكي
+// ═════════════════════════════════════════════════════════════
+
+async function smartAutoSelect(){
+const btn=el('smartBtn');
+btn.disabled=true;
+btn.innerHTML='<span class="loading-spinner"></span> جاري الفحص...';
+
+// التحقق من دعم File System Access API
+if('showDirectoryPicker' in window){
+// المتصفح يدعم API الحديثة!
+btn.innerHTML='<span class="loading-spinner"></span> استخدام الوضع المتقدم...';
+await useFileSystemAPI();
+}else{
+// استخدام الطريقة التقليدية
+btn.innerHTML='<span class="loading-spinner"></span> استخدام الوضع التقليدي...';
+useFolderPicker();
+}
+}
+
+// ─────────────────────────────────────────────────────────────
+// الطريقة 1: File System Access API (الأحدث)
+// ─────────────────────────────────────────────────────────────
+
+async function useFileSystemAPI(){
+try{
+showStatus('auto','info','🔍 اختر المجلد الذي تريد نقل محتوياته...');
+
+// فتح نافذة اختيار المجلد
+const dirHandle=await window.showDirectoryPicker({
+mode:'read',
+startIn:'pictures'  // يبدأ من مجلد الصور
+});
+
+showStatus('auto','info','📂 جاري فحص المجلد وجمع الملفات...');
+show('autoProgress');
+
+selectedFiles=[];
+let scannedCount=0;
+
+// دالة متكررة لفحص المجلدات
+async function scanDirectory(dirHandle,path=''){
+for await(const entry of dirHandle.values()){
+if(entry.kind==='file'){
+// وجدنا ملف!
+const file=await entry.getFile();
+selectedFiles.push(file);
+scannedCount++;
+
+// تحديث العداد
+if(scannedCount%10===0){
+el('autoProgress').innerHTML=`<div class="file-count">🔍 تم العثور على ${scannedCount} ملف...</div>`;
+}
+}else if(entry.kind==='directory'){
+// مجلد فرعي - ندخل فيه
+await scanDirectory(entry,path+'/'+entry.name);
+}
+}
+}
+
+// بدء الفحص
+await scanDirectory(dirHandle);
+
+// الانتهاء من الجمع
+el('autoProgress').innerHTML=`<div class="file-count">✅ تم جمع ${selectedFiles.length} ملف تلقائياً!</div>`;
+showStatus('auto','success',`✅ تم! جاهز لنقل ${selectedFiles.length} ملف`);
+
+// بدء النقل مباشرة
+setTimeout(()=>{
+startTransfer();
+},1500);
+
+}catch(err){
+if(err.name==='AbortError'){
+// المستخدم ألغى العملية
+showStatus('auto','info','⚠️ تم الإلغاء. جرب مرة أخرى.');
+el('smartBtn').disabled=false;
+el('smartBtn').innerHTML='🚀 بدء النقل التلقائي';
+}else{
+// خطأ آخر - استخدم الطريقة التقليدية
+showStatus('auto','error','⚠️ حدث خطأ. جرب الطريقة التقليدية...');
+setTimeout(useFolderPicker,2000);
+}
+}
+}
+
+// ─────────────────────────────────────────────────────────────
+// الطريقة 2: webkitdirectory (التقليدية)
+// ─────────────────────────────────────────────────────────────
+
+function useFolderPicker(){
+hide('smartBtn');
+show('folderArea');
+showStatus('auto','info','📂 اضغط على المربع أدناه لاختيار مجلد كامل');
+}
+
+function folderSelected(){
+selectedFiles=Array.from(el('folderInput').files);
+if(selectedFiles.length>0){
+el('autoProgress').classList.remove('hidden');
+el('autoProgress').innerHTML=`<div class="file-count">✅ تم اختيار ${selectedFiles.length} ملف من المجلد!</div>`;
+showStatus('auto','success','✅ جاهز للنقل!');
+setTimeout(startTransfer,1500);
+}
+}
+
+// ═════════════════════════════════════════════════════════════
+// الوضع اليدوي
+// ═════════════════════════════════════════════════════════════
+
+function filesSelected(){
+selectedFiles=Array.from(el('filesInput').files);
+if(selectedFiles.length>0){
+show('fileCountOld');
+el('fileCountOld').innerHTML=`<div class="file-count">✅ تم اختيار ${selectedFiles.length} ملف</div>`;
+show('sendBtn');
+}
+}
+
+// ═════════════════════════════════════════════════════════════
+// بدء نقل الملفات (مشترك للوضعين)
+// ═════════════════════════════════════════════════════════════
+
+function startTransfer(){
+if(selectedFiles.length===0){
+showStatus('send','error','⚠️ لم يتم اختيار أي ملفات!');
+return;
+}
+
+// تحديد أي شاشة نستخدم
+const isAutoMode=!el('autoModeScreen').classList.contains('hidden');
+const statusId=isAutoMode?'autoStatus':'sendStatus';
+const progressId=isAutoMode?'autoProgress':'sendProgress';
+
+showStatus(statusId.replace('Status',''),'info','🔗 جاري الاتصال بالهاتف الجديد...');
+
+try{
+peer=new Peer({
+config:{iceServers:[
+{urls:'stun:stun.l.google.com:19302'},
+{urls:'stun:stun1.l.google.com:19302'},
+{urls:'stun:global.stun.twilio.com:3478'}
+]}
+});
+
+peer.on('open',()=>{
+connection=peer.connect(transferId,{reliable:true});
+
+connection.on('open',()=>{
+showStatus(statusId.replace('Status',''),'success','✅ تم الاتصال! جاري إرسال '+selectedFiles.length+' ملف...');
+el(progressId).classList.remove('hidden');
+
+let sentCount=0;
+selectedFiles.forEach(file=>{
+const reader=new FileReader();
+reader.onload=e=>{
+if(connection&&connection.open){
+connection.send({
+name:file.name,
+type:file.type,
+size:file.size,
+data:e.target.result
+});
+sentCount++;
+const progress=(sentCount/selectedFiles.length)*100;
+el(progressId).innerHTML=`<div class="progress"><div class="progress-bar" style="width:${progress}%"></div></div>`;
+
+if(sentCount===selectedFiles.length){
+el(statusId).innerHTML=`<div class="status success">🎉 تم! أُرسل ${sentCount} ملف بنجاح</div>`;
+setTimeout(()=>{
+if(connection)connection.close();
+},1500);
+}
+}
+};
+reader.onerror=()=>{
+console.error('خطأ في قراءة الملف:',file.name);
+};
+reader.readAsDataURL(file);
+});
+});
+
+connection.on('error',()=>{
+showStatus(statusId.replace('Status',''),'error','❌ حدث خطأ أثناء الإرسال');
+});
+});
+
+peer.on('error',()=>{
+showStatus(statusId.replace('Status',''),'error','❌ خطأ في الاتصال. تأكد من الرابط');
+});
+
+}catch(e){
+showStatus(statusId.replace('Status',''),'error','❌ خطأ: '+e.message);
+}
+}
+
+// ═════════════════════════════════════════════════════════════
+// دوال مساعدة
+// ═════════════════════════════════════════════════════════════
+
+function showStatus(screen,type,message){
+const statusDiv=document.getElementById(screen+'Status');
+if(statusDiv){
+statusDiv.innerHTML=`<div class="status ${type}">${message}</div>`;
+}
+}
+
+function el(id){return document.getElementById(id)}
+function hide(id){el(id).classList.add('hidden')}
+function show(id){el(id).classList.remove('hidden')}
+
+window.onbeforeunload=e=>{
+if(connection&&connection.open){
+e.preventDefault();
+return'جاري نقل الملفات...';
+}
+};
+</script>
+</body>
+</html>
